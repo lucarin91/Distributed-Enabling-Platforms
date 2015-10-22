@@ -15,5 +15,3 @@ We will review two different Hadoop deployments:
 2. By setting up a [pseudo-distributed cluster](./pdm.md) on your local machine. This deployment is used to learn how the Hadoop basic components must be installed and configured on a single machine, and how to execute simple Hadoop programs on top of it.
 
 For an easy way to set up a cluster, try [Cloudera Manager](http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin) at your own risk on your own cluster. :wink:
-
-# 
