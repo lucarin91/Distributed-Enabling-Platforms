@@ -27,7 +27,7 @@ your home folder.
 
   If you cannot ssh to localhost without a passphrase, execute the following commands:
 
-		hadoop@localhost$ ssh-keygen -t rsa -P '' -f ~/.ssh/id_dsa
+		hadoop@localhost$ ssh-keygen -t rsa -P '' -f ~/.ssh/ir_rsa
         hadoop@localhost$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
   The first command will create a private/public pair of keys in the `.ssh` folder in your home folder. If asked for passphrase, leave blank and hit return.
@@ -124,7 +124,7 @@ be very time consuming if we do not automatise the tasks.
 
 [Apache Maven](http://maven.apache.org/) allows a project to build using its *project object model* (POM) and a set
 of plugins that are shared by all projects using Maven, providing a uniform
-**build system**. 
+**build system**.
 
 Let see how to configure a Apache Maven `pom.xml` file to obtain a single jar with code plus
 dependencies ready to be executed on a Hadoop environment.
@@ -168,14 +168,40 @@ Delete/ignore the `test` folder, as well as the `App.java` file. We write our ow
 	
 ### Update POM
 
-Add the dependencies `org.apache.hadoop:hadoop-common` and `org.apache.hadoop:hadoop-core`. 
+Add the plugin configuration and the dependencies `org.apache.hadoop:hadoop-client` and `org.apache.hadoop:hadoop-core`. 
 Version numbers can vary, we currently use version 1.2.1. 
+
+    <build>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.0</version>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+            <encoding>${project.build.sourceEncoding}</encoding>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
 
 	<dependencies>
     	<dependency>
         	<groupId>org.apache.hadoop</groupId>
         	<artifactId>hadoop-common</artifactId>
-        	<version>2.5.1</version>
+        	<version>1.2.1</version>
     	</dependency>
 
     	<dependency>
@@ -191,6 +217,8 @@ Version numbers can vary, we currently use version 1.2.1.
 ### Write code	
 	
 	nano src/main/java/it/cnr/isti/pad/WordCount.java
+
+Edit the Java file with content, then close the file (Ctrl+O).
 	
 ### Compile and package
 
@@ -202,8 +230,8 @@ If compilation and packaging runs smoothly, we will get a new `target` folder, c
 
 1. Open a terminal and run the following commands:
 
-        hadoop fs -put workspace/WordCount/pg100.txt
-        hadoop jar wordcount.jar it.cnr.isti.pad. wordcount.WordCount pg100.txt output
+        hadoop fs -put pg100.txt pg100.txt
+        hadoop jar wordcount-1.0-SNAPSHOT.jar it.cnr.isti.pad.WordCount pg100.txt output.txt output
 2. Run the following command: 
 
         hadoop fs -ls output
