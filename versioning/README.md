@@ -2,7 +2,7 @@ Classes for operating on vector clocks and dealing with distributed state, direc
 
 ## Scalar Clocks
 
-The building block of vector clocks systems is the **scalar logical clock**, implemented in the class [`ClockEntry`](src/main/java/voldemort/versioning/ClockEntry.java). A base clock has an identifier `nodeId` (non-negative short) and a clock value [`Version`](src/main/java/voldemort/versioning/Version.java) (positive long).
+The building block of vector clocks systems is the **scalar logical clock**, implemented in the class [`ClockEntry`](src/main/java/voldemort/versioning/ClockEntry.java). A base clock has an identifier `nodeId` (non-negative short) and a clock value `Version` (positive long).
 
 The important methods of `ClockEntry` objects are:
 * constructors,
