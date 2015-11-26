@@ -1,8 +1,7 @@
 package com.google.code.gossip;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -14,7 +13,7 @@ import com.google.code.gossip.manager.random.RandomGossipManager;
  * This object represents the service which is responsible for gossiping with
  * other gossip members.
  */
-public class GossipService 
+public class GossipService
 {
 	public static final Logger LOGGER = Logger.getLogger(GossipService.class);
 
@@ -26,16 +25,24 @@ public class GossipService
 	 * @throws InterruptedException
 	 * @throws UnknownHostException
 	 */
-	public GossipService(StartupSettings startupSettings) throws InterruptedException, UnknownHostException 
+	public GossipService(StartupSettings startupSettings) throws InterruptedException, UnknownHostException
 	{
-		this(InetAddress.getLocalHost().getHostAddress(), 
-			 startupSettings.getPort(), 
-			 "", 
-			 startupSettings.getLogLevel(),
-			 startupSettings.getGossipMembers(), 
-			 startupSettings.getGossipSettings(), 
-			 null
-		);
+		String myIp = InetAddress.getLocalHost().getHostAddress();
+		try {
+			Enumeration<NetworkInterface> b = NetworkInterface.getNetworkInterfaces();
+			while (b.hasMoreElements()) {
+				for (InterfaceAddress f : b.nextElement().getInterfaceAddresses())
+					if (f.getAddress().isSiteLocalAddress())
+						myIp = f.getAddress().getHostAddress();
+			}
+		} catch (SocketException e) {}
+		System.out.println(myIp);
+		_gossipManager = new RandomGossipManager(myIp,
+																						 startupSettings.getPort(),
+																						 "",
+																						 startupSettings.getGossipSettings(),
+																						 startupSettings.getGossipMembers(),
+																						 null);
 	}
 
 	/**
@@ -45,28 +52,28 @@ public class GossipService
 	 * @throws InterruptedException
 	 * @throws UnknownHostException
 	 */
-	public GossipService(String ipAddress, int port, String id, int logLevel, 
-						 List<GossipMember> gossipMembers, GossipSettings settings, GossipListener listener) throws InterruptedException, UnknownHostException 
+	public GossipService(String ipAddress, int port, String id, int logLevel,
+						 List<GossipMember> gossipMembers, GossipSettings settings, GossipListener listener) throws InterruptedException, UnknownHostException
 	{
 		_gossipManager = new RandomGossipManager(ipAddress, port, id, settings, gossipMembers, listener);
 	}
 
-	public void start() 
+	public void start()
 	{
 		_gossipManager.start();
 	}
 
-	public void shutdown() 
+	public void shutdown()
 	{
 		_gossipManager.shutdown();
 	}
 
-	public GossipManager get_gossipManager() 
+	public GossipManager get_gossipManager()
 	{
 		return _gossipManager;
 	}
 
-	public void set_gossipManager(GossipManager _gossipManager) 
+	public void set_gossipManager(GossipManager _gossipManager)
 	{
 		this._gossipManager = _gossipManager;
 	}
