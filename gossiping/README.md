@@ -10,7 +10,9 @@ Command-Line Usage
 From command line, you can start a gossip service with a single seed node by using:
 
 ```bash
-java -cp gossip.jar com.google.code.gossip.GossipRunner <port> <seed ip>
+cd gossiping
+mvn clean compile
+java -cp target/gossip-0.0.3-jar-with-dependencies.jar com.google.code.gossip.GossipRunner <port> <seed ip>
 ```
 
 Alternatively, you can provide a configuration file at startup:
@@ -100,9 +102,7 @@ Users can also attach an event listener:
 Maven
 ------
 
-
-You can get this software from maven central.
-
+If you want to use this software with another Java project, you don't need to copy the code or the Jar file. You can get this software from maven central. Just include the following dependency in the project POM file.
 ```xml
   <dependency>
        <groupId>it.cnr.isti.hpclab</groupId>
