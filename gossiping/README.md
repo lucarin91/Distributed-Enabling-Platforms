@@ -103,7 +103,6 @@ Maven
 ------
 
 If you want to use this software with another Java project, you don't need to copy the code or the Jar file. You can get this software from maven central. Just include the following dependency in the project POM file.
-
 ```xml
   <dependency>
        <groupId>it.cnr.isti.hpclab</groupId>
